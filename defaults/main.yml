@@ -1,0 +1,40 @@
+---
+# defaults file for ansible_role_fail2ban
+fail2ban_configdir: /etc/fail2ban
+
+# Dict to deploy as INI style file
+fail2ban_jail_local: {}
+#fail2ban_jail_local:
+#  wordfence:
+#    enabled: true
+#    filter: wordfence
+#    logpath: /var/spool/mail/www-data
+#    bantime: 86400
+#    port: 80,443
+#    banaction: iptables-allports
+
+# dict with filenames below action.d as key, containing an INI data structure.
+fail2ban_actiond: {}
+#fail2ban_actiond:
+#  nginx-block-map.local:
+#    Definition:
+#      srv_cfg_pathi: /etc/nginx/
+#      srv_cmd: nginx
+#      actionflush: truncate -s 0 '%(blck_lst_file)s'; %(blck_lst_reload)s
+#      actionstop: "%(actionflush)s"
+#      actioncheck: ""
+#      actionban: echo "<ip> 1;" >> '%(blck_lst_file)s'; %(blck_lst_reload)s
+#      actionunban: id=$(echo "<ip>" | sed -e 's/[]\/$*.^|[]/\\&/g'); sed -i "/$id 1;/d" %(blck_lst_file)s; %(blck_lst_reload)s
+#  nginx-two_block.local:
+#    Defintion:
+#      srv_record: out1
+#      zapp: false
+#      zappt: true
+#      command: /usr/bin/true -f
+
+# dict with filenames below filter.d as key, containing an INI data structure.
+fail2ban_filterd: {}
+#fail2ban_filterd:
+#  wordfence.conf:
+#    Definition:
+#      failregex: A user with IP address <HOST> has been locked out from signing in or using the password recovery form for the following reason

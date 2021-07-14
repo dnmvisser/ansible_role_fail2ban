@@ -1,0 +1,44 @@
+---
+# tasks file for ansible_role_fail2ban
+- name: Ensure fail2ban packages are available
+  apt:
+    name: "{{ fail2ban_packages }}"
+    
+- name: Ensure jail.local configuration file is available
+  template:
+    src: dict2ini.j2
+    dest: "{{ fail2ban_configdir }}/jail.local"
+    mode: 0644
+    owner: root
+    group: root
+  vars:
+    ini_data: "{{ fail2ban_jail_local }}"
+  notify: restart_fail2ban
+
+- name: Ensure action files are available
+  template:
+    src: dict2ini.j2
+    dest: "{{ fail2ban_configdir }}/action.d/{{ item.key }}"
+    mode: 0644
+    owner: root
+    group: root
+  loop: "{{ fail2ban_actiond|dict2items }}"
+  loop_control:
+    label: "{{ fail2ban_configdir }}/action.d/{{ item.key }}"
+  vars:
+    ini_data: "{{ item.value }}"
+  notify: restart_fail2ban
+
+- name: Ensure filter files are available
+  template:
+    src: dict2ini.j2
+    dest: "{{ fail2ban_configdir }}/filter.d/{{ item.key }}"
+    mode: 0644
+    owner: root
+    group: root
+  loop: "{{ fail2ban_filterd|dict2items }}"
+  loop_control:
+    label: "{{ fail2ban_configdir }}/filter.d/{{ item.key }}"
+  vars:
+    ini_data: "{{ item.value }}"
+  notify: restart_fail2ban

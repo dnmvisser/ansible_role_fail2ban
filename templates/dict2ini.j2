@@ -1,0 +1,8 @@
+# vim: set ft=dosini:
+# {{ ansible_managed }}
+{% for section in ini_data %}
+[{{ section }}]
+{% for option, value in ini_data[section].items() %}
+{{ option }} = {{ value }}
+{% endfor %}
+{% endfor %}
