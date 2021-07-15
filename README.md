@@ -56,7 +56,6 @@ This will results in the following files to be generated:
 /etc/fail2ban/jail.local:
 
 ```
-# vim: set ft=dosini:
 # Ansible managed
 [DEFAULT]
 bantime = 86400
@@ -68,7 +67,6 @@ logpath = %(sshd_logs)s
 /etc/fail2ban/action.d/nginx-block-map.local:
 
 ```
-# vim: set ft=dosini:
 # Ansible managed
 [Definition]
 srv_cfg_pathi = /etc/nginx/
@@ -81,7 +79,6 @@ blck_lst_reload = %(srv_cmd)s -qt; if [ $? -eq 0 ]; then
 /etc/fail2ban/filter.d/wordfence.conf:
 
 ```
-# vim: set ft=dosini:
 # Ansible managed
 [Definition]
 failregex = A user with IP address <HOST> has been locked out from signing in or using the password recovery form for the following reason
