@@ -53,7 +53,7 @@ will be created under `/etc/fail2ban/filter.d`.
 This will results in the following files to be generated:
 
 
-/etc/fail2ban/jail.local:
+`/etc/fail2ban/jail.local`:
 
 ```
 # Ansible managed
@@ -64,7 +64,7 @@ maxretry = 2
 logpath = %(sshd_logs)s
 ```
 
-/etc/fail2ban/action.d/nginx-block-map.local:
+`/etc/fail2ban/action.d/nginx-block-map.local`:
 
 ```
 # Ansible managed
@@ -76,7 +76,7 @@ blck_lst_reload = %(srv_cmd)s -qt; if [ $? -eq 0 ]; then
                 fi;
 ```
 
-/etc/fail2ban/filter.d/wordfence.conf:
+`/etc/fail2ban/filter.d/wordfence.conf`:
 
 ```
 # Ansible managed
