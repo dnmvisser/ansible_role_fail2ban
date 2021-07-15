@@ -1,6 +1,7 @@
 # ansible_role_fail2ban
 
-Deploy and configure fail2ban on Debian.
+Deploy and configure fail2ban on Debian. No hardcoded configuration
+files/templates, everything as variables.
 
 # Role variables
 
@@ -46,4 +47,41 @@ will be created under `/etc/fail2ban/filter.d`.
             wordfence.conf:
               Definition:
                 failregex: A user with IP address <HOST> has been locked out from signing in or using the password recovery form for the following reason
+```
+
+This will results in the following files to be generated:
+
+
+`/etc/fail2ban/jail.local`:
+
+```ini
+# vim: set ft=dosini:
+# Ansible managed
+[DEFAULT]
+bantime = 86400
+maxretry = 2
+[sshd]
+logpath = %(sshd_logs)s
+```
+
+`/etc/fail2ban/action.d/nginx-block-map.local`:
+
+```ini
+# vim: set ft=dosini:
+# Ansible managed
+[Definition]
+srv_cfg_pathi = /etc/nginx/
+srv_cmd = nginx
+blck_lst_reload = %(srv_cmd)s -qt; if [ $? -eq 0 ]; then
+                  %(srv_cmd)s -s reload; if [ $? -ne 0 ]; then echo 'reload failed.'; fi;
+                fi;
+```
+
+`/etc/fail2ban/filter.d/wordfence.conf`:
+
+```ini
+# vim: set ft=dosini:
+# Ansible managed
+[Definition]
+failregex = A user with IP address <HOST> has been locked out from signing in or using the password recovery form for the following reason
 ```
