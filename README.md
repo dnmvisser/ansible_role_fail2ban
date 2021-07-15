@@ -54,7 +54,7 @@ This will results in the following files to be generated:
 
 `/etc/fail2ban/jail.local`:
 
-```ini
+```
 # vim: set ft=dosini:
 # Ansible managed
 [DEFAULT]
@@ -66,7 +66,7 @@ logpath = %(sshd_logs)s
 
 `/etc/fail2ban/action.d/nginx-block-map.local`:
 
-```ini
+```
 # vim: set ft=dosini:
 # Ansible managed
 [Definition]
@@ -79,7 +79,7 @@ blck_lst_reload = %(srv_cmd)s -qt; if [ $? -eq 0 ]; then
 
 `/etc/fail2ban/filter.d/wordfence.conf`:
 
-```ini
+```
 # vim: set ft=dosini:
 # Ansible managed
 [Definition]
