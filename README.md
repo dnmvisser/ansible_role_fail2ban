@@ -1,38 +1,49 @@
-Role Name
-=========
+# ansible_role_fail2ban
 
-A brief description of the role goes here.
+Deploy and configure fail2ban on Debian.
 
-Requirements
-------------
+# Role variables
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+All configuration file tasks use a template that generates fail2ban
+configuration files from a dict:
 
-Role Variables
---------------
+`fail2ban_jail_local`: Dictionary that will be deployed as a single file "jail.local".
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`fail2ban_actiond`: Dictionary where the first keys are the file names that
+will be created under `/etc/fail2ban/action.d`.
 
-Dependencies
-------------
+`fail2ban_filterd`: Dictionary where the first keys are the file names that
+will be created under `/etc/fail2ban/filter.d`.
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+# Example Playbook
 
-Example Playbook
-----------------
+```yaml
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+  - hosts: servers
+    
+    tasks:
+      - name: install and configure fail2ban
+        import_role:
+          name: ansible_role_fail2ban
+        tags: fail2ban
+        vars:
+          fail2ban_jail_local:
+            DEFAULT:
+              bantime: 86400
+              maxretry: 2
+            sshd:
+              port: ssh
+              logpath: '%(sshd_logs)s'
+          fail2ban_actiond:
+            nginx-block-map.local:
+              Definition:
+                srv_cmd: nginx
+                blck_lst_reload: |
+                  %(srv_cmd)s -qt; if [ $? -eq 0 ]; then
+                                    %(srv_cmd)s -s reload; if [ $? -ne 0 ]; then echo 'reload failed.'; fi;
+                                  fi;
+          fail2ban_filterd:
+            wordfence.conf:
+              Definition:
+                failregex: A user with IP address <HOST> has been locked out from signing in or using the password recovery form for the following reason
+```
