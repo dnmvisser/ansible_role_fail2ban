@@ -1,4 +1,5 @@
-# ansible_role_fail2ban
+ansible_role_fail2ban
+=====================
 
 Deploy and configure fail2ban on Debian. No hardcoded configuration
 files/templates, everything as variables.
